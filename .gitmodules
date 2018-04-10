@@ -1,0 +1,3 @@
+[submodule "src/my-style"]
+	path = src/my-style
+	url = https://github.com/kjintroverted/my-style.git
