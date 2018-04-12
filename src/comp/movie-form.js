@@ -8,7 +8,8 @@ class MovieForm extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            movie: {
+            movie: this.props.movie || 
+            {
                 storyRating: 1,
                 characterRating: 1,
                 performanceRating: 1,
@@ -19,8 +20,9 @@ class MovieForm extends React.Component {
     }
 
     static propTypes = {
-        submit: PropTypes.func,
-        cancel: PropTypes.func
+        submit: PropTypes.func.isRequired,
+        cancel: PropTypes.func.isRequired,
+        delete: PropTypes.func
     };
 
     handleInput(e) {
@@ -42,33 +44,42 @@ class MovieForm extends React.Component {
         return (
             <div className="movie-form column items-center flex-70">
                 <div className="row wrap items-center flex-100">
-                    <input name="title" className="wr-input flex-60 lt-md-flex-100" type="text" 
+                    <input name="title" value={this.state.movie.title} 
+                    className="wr-input flex-60 lt-md-flex-100" type="text" 
                     placeholder="Title" onChange={(e) => this.handleInput(e)}/>
                     
-                    <input name="releaseDate" className="wr-input flex-30 lt-md-flex-100 txt-c" type="date" 
+                    <input name="releaseDate" 
+                    value={`${this.state.movie.releaseDate.getFullYear()}-${('0' + (this.state.movie.releaseDate.getMonth() + 1)).substr(-2)}-${this.state.movie.releaseDate.getDate()}`} 
+                    className="wr-input flex-30 lt-md-flex-100 txt-c" type="date" 
                     placeholder="Release" onChange={(e) => this.handleInput(e)}/>
                 </div>
                 <div className="row wrap flow-center flex-100">
-                    <input name="storyRating" className="wr-input flex-15 lt-md-flex-35 txt-c" type="number" 
-                    defaultValue={1} max="10" min="1" placeholder="Story" onChange={(e) => this.handleInput(e)}/>
+                    <input name="storyRating" value={this.state.movie.storyRating} 
+                    className="wr-input flex-15 lt-md-flex-35 txt-c" type="number" 
+                    max="10" min="1" placeholder="Story" onChange={(e) => this.handleInput(e)}/>
                     
-                    <input name="characterRating" className="wr-input flex-15 lt-md-flex-35 txt-c" type="number" 
-                    defaultValue={1} max="10" min="1" placeholder="Char" onChange={(e) => this.handleInput(e)}/>
+                    <input name="characterRating" value={this.state.movie.characterRating} 
+                    className="wr-input flex-15 lt-md-flex-35 txt-c" type="number" 
+                    max="10" min="1" placeholder="Char" onChange={(e) => this.handleInput(e)}/>
                     
-                    <input name="performanceRating" className="wr-input flex-15 lt-md-flex-35 txt-c" type="number" 
-                    defaultValue={1} max="10" min="1" placeholder="Perf" onChange={(e) => this.handleInput(e)}/>
+                    <input name="performanceRating" value={this.state.movie.performanceRating} 
+                    className="wr-input flex-15 lt-md-flex-35 txt-c" type="number" 
+                    max="10" min="1" placeholder="Perf" onChange={(e) => this.handleInput(e)}/>
                     
-                    <input name="visualRating" className="wr-input flex-15 lt-md-flex-35 txt-c" type="number" 
-                    defaultValue={1} max="10" min="1" placeholder="Visual" onChange={(e) => this.handleInput(e)}/>
+                    <input name="visualRating" value={this.state.movie.visualRating} 
+                    className="wr-input flex-15 lt-md-flex-35 txt-c" type="number" 
+                    max="10" min="1" placeholder="Visual" onChange={(e) => this.handleInput(e)}/>
                     
-                    <input name="soundRating" className="wr-input flex-15 lt-md-flex-35 txt-c" type="number" 
-                    defaultValue={1} max="10" min="1" placeholder="Sound" onChange={(e) => this.handleInput(e)}/>
+                    <input name="soundRating" value={this.state.movie.soundRating} 
+                    className="wr-input flex-15 lt-md-flex-35 txt-c" type="number" 
+                    max="10" min="1" placeholder="Sound" onChange={(e) => this.handleInput(e)}/>
                 </div>
                 <div className="row flow-end flex-100">
                     <Button onClick={this.props.cancel}>Cancel</Button>
+                    <Button onClick={this.props.delete} color="secondary">Delete</Button>
                     <Button onClick={() => this.props.submit(this.state.movie)} 
                         disabled={!this.state.movie.title || !this.state.movie.releaseDate} 
-                        variant="raised" color="primary">Add</Button>
+                        variant="raised" color="primary">Sumbit</Button>
                 </div>
             </div>
         );

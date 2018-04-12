@@ -6,6 +6,7 @@ import { withTheme } from 'material-ui/styles';
 import './movie-list.css';
 import MovieForm from '../movie-form';
 import NumberView from '../number-view';
+import { isNumber } from 'util';
 
 class MovieList extends React.Component {
 
@@ -13,44 +14,83 @@ class MovieList extends React.Component {
         super(props);
         this.state = {
             addNew: false,
+            editIndex: null,
             movies: this.props.movies
         }
 
-        this.addCancel = this.addCancel.bind(this);
+        this.toggleEdit = this.toggleEdit.bind(this);
         this.addMovie = this.addMovie.bind(this);
+        this.editMovie = this.editMovie.bind(this);
+        this.deleteMovie = this.deleteMovie.bind(this);
+    }
+
+    componentWillMount() {
+        this.setState({
+            movies: [...this.state.movies].sort((a, b) => {
+                return b.rating - a.rating;
+            })
+        });
     }
 
     static propTypes = {
         movies: PropTypes.array.isRequired
     }
 
-    addCancel() {
-        this.setState({
-            addNew: !this.state.addNew
-        });
+    toggleEdit(i) {
+        if (isNumber(i)) {
+            this.setState({
+                editIndex: i
+            });
+        } else if (isNumber(this.state.editIndex)) {
+            this.setState({
+                editIndex: null
+            });
+        } else {
+            this.setState({
+                addNew: !this.state.addNew
+            });
+        }
     }
 
     addMovie(movie) {
         const updatedMovies = [...this.state.movies, movie];
         this.setState({movies: updatedMovies});
-        this.addCancel();
+        this.toggleEdit();
+    }
+
+    editMovie(movie) {
+        const movies = this.state.movies;
+        const i = this.state.editIndex;
+        this.setState({
+            movies: [...movies.slice(0, i), movie, ...movies.slice(i+1)]
+        });
+        this.toggleEdit();
+    }
+
+    deleteMovie(movie) {
+        const movies = this.state.movies;
+        const i = this.state.editIndex;
+        this.setState({
+            movies: [...movies.slice(0, i), ...movies.slice(i+1)]
+        });
+        this.toggleEdit();
     }
 
     render() {
         const theme = this.props.theme;
 
-        // console.debug('palette', theme.palette);
 
         const highlightStyle = {color: theme.palette.secondary['800']};
 
-        const sortedMovies = [...this.state.movies].sort((a, b) => {
-            return b.rating - a.rating;
-        });
-
-        const movieRows = sortedMovies.map((movie, i) => {
+        const movieRows = this.state.movies.map((movie, i) => {
+            if (this.state.editIndex === i) {
+                return <MovieForm key={i} cancel={this.toggleEdit} submit={this.editMovie} delete={this.deleteMovie} movie={movie} />
+            }
             return (
-                <div className={`wr-card row items-center flex-80 lt-sm-flex-90 ${i % 2 === 1 ? 'odd' : ''}`}>
-                    <div className="flex-10 txt-c"><Button style={{marginLeft: "-20px"}} variant="fab" mini color="primary">{i+1}</Button></div>
+                <div key={i} className={`wr-card row items-center flex-80 lt-sm-flex-90 ${i % 2 === 1 ? 'odd' : ''}`}>
+                    <div className="flex-10 txt-c">
+                        <Button onClick={() => this.toggleEdit(i)} style={{marginLeft: "-20px"}} variant="fab" mini color="primary">{i+1}</Button>
+                    </div>
                     <h2 className="flex-45 lt-md-flex-75">{movie.title}</h2>
                     <h2 className="txt-c flex-15" style={highlightStyle}>
                         {<NumberView value={movie.rating} decimalPlaces={2} /> || '-'}
@@ -68,7 +108,7 @@ class MovieList extends React.Component {
             <div className="movie-list column items-center flex-100">
                 <div className={`row items-center flex-80 lt-sm-flex-90`}
                 style={{marginBottom: "-15px"}}>
-                    <div className="txt-c flex-10"><Button style={{marginLeft: "-20px"}} color="primary" onClick={this.addCancel}>
+                    <div className="txt-c flex-10"><Button style={{marginLeft: "-20px"}} color="primary" onClick={this.toggleEdit}>
                         <i className="material-icons">{this.state.addNew ? 'cancel' : 'add'}</i>
                     </Button></div>
                     <h4 className="txt-c flex-45 lt-md-flex-75">Title</h4>
@@ -79,7 +119,7 @@ class MovieList extends React.Component {
                     <h4 className="txt-c flex-5 lt-md-hide">Vis</h4>
                     <h4 className="txt-c flex-5 lt-md-hide">Sound</h4>
                 </div>
-                {this.state.addNew ? <MovieForm cancel={this.addCancel} submit={this.addMovie} /> : null}
+                {this.state.addNew ? <MovieForm cancel={this.toggleEdit} submit={this.addMovie} /> : null}
                 {movieRows}
             </div>
         )
