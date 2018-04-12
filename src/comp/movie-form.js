@@ -41,6 +41,7 @@ class MovieForm extends React.Component {
     }
 
     render() {
+        const date = this.state.movie.releaseDate ? `${this.state.movie.releaseDate.getFullYear()}-${('0' + (this.state.movie.releaseDate.getMonth() + 1)).substr(-2)}-${this.state.movie.releaseDate.getDate()}` : '';
         return (
             <div className="movie-form column items-center flex-70">
                 <div className="row wrap items-center flex-100">
@@ -48,8 +49,7 @@ class MovieForm extends React.Component {
                     className="wr-input flex-60 lt-md-flex-100" type="text" 
                     placeholder="Title" onChange={(e) => this.handleInput(e)}/>
                     
-                    <input name="releaseDate" 
-                    value={`${this.state.movie.releaseDate.getFullYear()}-${('0' + (this.state.movie.releaseDate.getMonth() + 1)).substr(-2)}-${this.state.movie.releaseDate.getDate()}`} 
+                    <input name="releaseDate" value={date} 
                     className="wr-input flex-30 lt-md-flex-100 txt-c" type="date" 
                     placeholder="Release" onChange={(e) => this.handleInput(e)}/>
                 </div>
@@ -76,7 +76,7 @@ class MovieForm extends React.Component {
                 </div>
                 <div className="row flow-end flex-100">
                     <Button onClick={this.props.cancel}>Cancel</Button>
-                    <Button onClick={this.props.delete} color="secondary">Delete</Button>
+                    {this.props.delete ? <Button onClick={this.props.delete} color="secondary">Delete</Button> : null}
                     <Button onClick={() => this.props.submit(this.state.movie)} 
                         disabled={!this.state.movie.title || !this.state.movie.releaseDate} 
                         variant="raised" color="primary">Sumbit</Button>

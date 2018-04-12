@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import Button from 'material-ui/Button';
 import { withTheme } from 'material-ui/styles';
+import Typography from 'material-ui/Typography'
 
 import './movie-list.css';
 import MovieForm from '../movie-form';
@@ -107,17 +108,17 @@ class MovieList extends React.Component {
         return (
             <div className="movie-list column items-center flex-100">
                 <div className={`row items-center flex-80 lt-sm-flex-90`}
-                style={{marginBottom: "-15px"}}>
+                style={{marginTop: "15px"}}>
                     <div className="txt-c flex-10"><Button style={{marginLeft: "-20px"}} color="primary" onClick={this.toggleEdit}>
                         <i className="material-icons">{this.state.addNew ? 'cancel' : 'add'}</i>
                     </Button></div>
-                    <h4 className="txt-c flex-45 lt-md-flex-75">Title</h4>
-                    <h4 className="txt-c flex-15">Rating</h4>
-                    <h4 className="txt-c flex-5 lt-md-hide">Story</h4>
-                    <h4 className="txt-c flex-5 lt-md-hide">Char</h4>
-                    <h4 className="txt-c flex-5 lt-md-hide">Perf</h4>
-                    <h4 className="txt-c flex-5 lt-md-hide">Vis</h4>
-                    <h4 className="txt-c flex-5 lt-md-hide">Sound</h4>
+                    <Typography variant="subheading" color="primary" className="txt-c flex-45 lt-md-flex-75">Title</Typography>
+                    <Typography variant="subheading" color="primary" className="txt-c flex-15">Rating</Typography>
+                    <Typography variant="subheading" color="primary" className="txt-c flex-5 lt-md-hide">Story</Typography>
+                    <Typography variant="subheading" color="primary" className="txt-c flex-5 lt-md-hide">Char</Typography>
+                    <Typography variant="subheading" color="primary" className="txt-c flex-5 lt-md-hide">Perf</Typography>
+                    <Typography variant="subheading" color="primary" className="txt-c flex-5 lt-md-hide">Vis</Typography>
+                    <Typography variant="subheading" color="primary" className="txt-c flex-5 lt-md-hide">Sound</Typography>
                 </div>
                 {this.state.addNew ? <MovieForm cancel={this.toggleEdit} submit={this.addMovie} /> : null}
                 {movieRows}
