@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import Button from 'material-ui/Button';
 import { withTheme } from 'material-ui/styles';
 import Typography from 'material-ui/Typography'
+import axios from 'axios';
 
 import './movie-list.css';
 import MovieForm from '../movie-form';
@@ -33,8 +34,17 @@ class MovieList extends React.Component {
         });
     }
 
+    componentWillReceiveProps() {
+        this.setState({
+            movies: [...this.state.movies].sort((a, b) => {
+                return b.rating - a.rating;
+            })
+        });
+    }
+
     static propTypes = {
-        movies: PropTypes.array.isRequired
+        movies: PropTypes.array.isRequired,
+        update: PropTypes.func
     }
 
     toggleEdit(i) {
@@ -55,6 +65,7 @@ class MovieList extends React.Component {
 
     addMovie(movie) {
         const updatedMovies = [...this.state.movies, movie];
+        axios.put('/api/movies', movie).then(this.props.update);
         this.setState({movies: updatedMovies});
         this.toggleEdit();
     }
@@ -62,15 +73,17 @@ class MovieList extends React.Component {
     editMovie(movie) {
         const movies = this.state.movies;
         const i = this.state.editIndex;
+        axios.put('/api/movies', movie).then(this.props.update);
         this.setState({
             movies: [...movies.slice(0, i), movie, ...movies.slice(i+1)]
         });
         this.toggleEdit();
     }
 
-    deleteMovie(movie) {
+    deleteMovie() {
         const movies = this.state.movies;
         const i = this.state.editIndex;
+        axios.delete(`/api/movies/${movies[i]._id}`).then(this.props.update);
         this.setState({
             movies: [...movies.slice(0, i), ...movies.slice(i+1)]
         });

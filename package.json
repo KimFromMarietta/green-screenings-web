@@ -2,7 +2,10 @@
   "name": "my-movies",
   "version": "0.1.0",
   "private": true,
+  "proxy": "http://localhost:5000/",
   "dependencies": {
+    "axios": "^0.18.0",
+    "body-parser": "^1.18.2",
     "express": "^4.16.3",
     "material-ui": "^1.0.0-beta.41",
     "mongodb": "^3.0.6",
@@ -17,6 +20,7 @@
     "watch-css": "node-sass-chokidar src/ -o src/ --watch --recursive",
     "build": "node-sass-chokidar src/ -o src/ && react-scripts build",
     "build-css": "node-sass-chokidar src/ -o src/",
+    "serve": "nodemon server/app.js",
     "test": "react-scripts test --env=jsdom",
     "eject": "react-scripts eject"
   }
