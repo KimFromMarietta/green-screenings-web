@@ -8,15 +8,14 @@ class MovieForm extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            movie: this.props.movie || 
-            {
-                storyRating: 1,
-                characterRating: 1,
-                performanceRating: 1,
-                visualRating: 1,
-                soundRating: 1,
-                releaseDate: new Date()
-            }
+            movie: this.props.movie ||
+                {
+                    storyRating: 1,
+                    characterRating: 1,
+                    performanceRating: 1,
+                    visualRating: 1,
+                    soundRating: 1
+                }
         };
     }
 
@@ -28,11 +27,11 @@ class MovieForm extends React.Component {
 
     handleInput(e) {
         const key = e.target.name;
-        const value = key === 'title' ? e.target.value :
-                        key === 'releaseDate' ? new Date(e.target.value) : +e.target.value;
-        let movie = Object.assign({}, this.state.movie, {[e.target.name]: value});
+        const value = key === 'title' || key === 'comments' ? e.target.value :
+            key === 'releaseDate' ? new Date(e.target.value).getTime() : +e.target.value;
+        let movie = Object.assign({}, this.state.movie, { [e.target.name]: value });
         movie.rating = this.calculateRating(movie);
-        this.setState({movie: movie});
+        this.setState({ movie: movie });
     }
 
     calculateRating(movie) {
@@ -42,44 +41,49 @@ class MovieForm extends React.Component {
     }
 
     render() {
-        // const date = this.state.movie.releaseDate ? `${this.state.movie.releaseDate.getFullYear()}-${('0' + (this.state.movie.releaseDate.getMonth() + 1)).substr(-2)}-${this.state.movie.releaseDate.getDate()}` : '';
+        const date = this.state.movie.releaseDate ? new Date(this.state.movie.releaseDate) : null;
+        const dateString = date ? `${date.getFullYear()}-${('0' + (date.getMonth() + 1)).substr(-2)}-${('0' + date.getUTCDate()).substr(-2)}` : '';
         return (
             <div className="movie-form column items-center flex-70">
                 <div className="row wrap items-center flex-100">
-                    <input name="title" defaultValue={this.state.movie.title} 
-                    className="wr-input flex-60 lt-md-flex-100" type="text" 
-                    placeholder="Title" onChange={(e) => this.handleInput(e)}/>
-                    
-                    {/* <input name="releaseDate" defaultValue={date} 
-                    className="wr-input flex-30 lt-md-flex-100 txt-c" type="date" 
-                    placeholder="Release" onChange={(e) => this.handleInput(e)}/> */}
+                    <input name="title" defaultValue={this.state.movie.title}
+                        className="wr-mat-input flex-60 lt-md-flex-100" type="text"
+                        placeholder="Title" onBlur={(e) => this.handleInput(e)} />
+
+                    <input name="releaseDate" defaultValue={dateString}
+                        className="wr-mat-input flex-30 lt-md-flex-100 txt-c" type="date"
+                        placeholder="Release" onBlur={(e) => this.handleInput(e)} />
                 </div>
                 <div className="row wrap flow-center flex-100">
-                    <input name="storyRating" defaultValue={this.state.movie.storyRating} 
-                    className="wr-input flex-15 lt-md-flex-35 txt-c" type="number" 
-                    max="10" min="1" placeholder="Story" onChange={(e) => this.handleInput(e)}/>
-                    
-                    <input name="characterRating" defaultValue={this.state.movie.characterRating} 
-                    className="wr-input flex-15 lt-md-flex-35 txt-c" type="number" 
-                    max="10" min="1" placeholder="Char" onChange={(e) => this.handleInput(e)}/>
-                    
-                    <input name="performanceRating" defaultValue={this.state.movie.performanceRating} 
-                    className="wr-input flex-15 lt-md-flex-35 txt-c" type="number" 
-                    max="10" min="1" placeholder="Perf" onChange={(e) => this.handleInput(e)}/>
-                    
-                    <input name="visualRating" defaultValue={this.state.movie.visualRating} 
-                    className="wr-input flex-15 lt-md-flex-35 txt-c" type="number" 
-                    max="10" min="1" placeholder="Visual" onChange={(e) => this.handleInput(e)}/>
-                    
-                    <input name="soundRating" defaultValue={this.state.movie.soundRating} 
-                    className="wr-input flex-15 lt-md-flex-35 txt-c" type="number" 
-                    max="10" min="1" placeholder="Sound" onChange={(e) => this.handleInput(e)}/>
+                    <input name="storyRating" defaultValue={this.state.movie.storyRating}
+                        className="wr-mat-input flex-15 lt-md-flex-35 txt-c" type="number"
+                        max="10" min="1" placeholder="Story" onBlur={(e) => this.handleInput(e)} />
+
+                    <input name="characterRating" defaultValue={this.state.movie.characterRating}
+                        className="wr-mat-input flex-15 lt-md-flex-35 txt-c" type="number"
+                        max="10" min="1" placeholder="Char" onBlur={(e) => this.handleInput(e)} />
+
+                    <input name="performanceRating" defaultValue={this.state.movie.performanceRating}
+                        className="wr-mat-input flex-15 lt-md-flex-35 txt-c" type="number"
+                        max="10" min="1" placeholder="Perf" onBlur={(e) => this.handleInput(e)} />
+
+                    <input name="visualRating" defaultValue={this.state.movie.visualRating}
+                        className="wr-mat-input flex-15 lt-md-flex-35 txt-c" type="number"
+                        max="10" min="1" placeholder="Visual" onBlur={(e) => this.handleInput(e)} />
+
+                    <input name="soundRating" defaultValue={this.state.movie.soundRating}
+                        className="wr-mat-input flex-15 lt-md-flex-35 txt-c" type="number"
+                        max="10" min="1" placeholder="Sound" onBlur={(e) => this.handleInput(e)} />
+                </div>
+                <div className="row wrap flow-center flex-100">
+                    <textarea name="comments" rows="1" placeholder="Comments" defaultValue={this.state.movie.comments}
+                        className="wr-mat-input flex-100" onBlur={(e) => this.handleInput(e)} />
                 </div>
                 <div className="row flow-end flex-100">
                     <Button onClick={this.props.cancel}>Cancel</Button>
                     {this.props.delete ? <Button onClick={this.props.delete} color="secondary">Delete</Button> : null}
-                    <Button onClick={() => this.props.submit(this.state.movie)} 
-                        disabled={!this.state.movie.title || !this.state.movie.releaseDate} 
+                    <Button onClick={() => this.props.submit(this.state.movie)}
+                        disabled={!this.state.movie.title || !this.state.movie.releaseDate}
                         variant="raised" color="primary">Sumbit</Button>
                 </div>
             </div>
