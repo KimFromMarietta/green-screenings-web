@@ -2,7 +2,8 @@ const express = require('express');
 const router = express.Router();
 const Mongo = require('mongodb');
 
-const url = 'mongodb://127.0.0.1:27017';
+const url = process.env.MONGO_URL;
+const dbName = process.env.MOVIE_DB;
 
 router.get('/', (req, res) => {
     Mongo.connect(url, function (err, conn) {
@@ -11,7 +12,7 @@ router.get('/', (req, res) => {
             res.status(500).send(err);
         }
 
-        const db = conn.db('wkg-mongo1');
+        const db = conn.db(dbName);
 
         console.log("Connected successfully to server");
 
@@ -28,7 +29,7 @@ router.put('/', (req, res) => {
             res.status(500).send(err);
         }
 
-        const db = conn.db('wkg-mongo1');
+        const db = conn.db(dbName);
 
         const movie = req.body;
         console.log(`Connected successfully, attempting to ${movie._id ? 'update' : 'insert'} ${movie.title}`);
@@ -47,7 +48,7 @@ router.delete('/:id', (req, res) => {
             res.status(500).send(err);
         }
 
-        const db = conn.db('wkg-mongo1');
+        const db = conn.db(dbName);
 
         console.log("Connected successfully, attempting delete on " + req.params.id);
 
