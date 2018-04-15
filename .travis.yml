@@ -11,4 +11,3 @@ deploy:
     - master
   run:
   - "yarn build"
-  - "yarn start"
