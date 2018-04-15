@@ -9,5 +9,6 @@ deploy:
   branches:
     only:
     - master
-  script:
-    - npm run build
+   run:
+    - "yarn" build"
+    - "yarn start"
