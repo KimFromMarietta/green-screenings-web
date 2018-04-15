@@ -9,6 +9,6 @@ deploy:
   branches:
     only:
     - master
-   run:
-    - "yarn build"
-    - "yarn start"
+  run:
+  - "yarn build"
+  - "yarn start"
