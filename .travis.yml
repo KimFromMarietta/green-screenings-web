@@ -7,7 +7,5 @@ deploy:
   branches:
     only:
     - master
-  install:
-    - node-sass-chokidar src/ -o src/
   script:
     - npm run build

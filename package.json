@@ -22,7 +22,7 @@
     "build-css": "node-sass-chokidar src/ -o src/",
     "start": "node server/app.js",
     "serve": "nodemon server/app.js",
-    "test": "react-scripts test --env=jsdom",
+    "test": "node-sass-chokidar src/ -o src/ react-scripts test --env=jsdom",
     "eject": "react-scripts eject"
   }
 }
