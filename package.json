@@ -23,7 +23,7 @@
     "start": "node server/app.js",
     "serve": "nodemon server/app.js",
     "test": "node-sass-chokidar src/ -o src/ && react-scripts test --env=jsdom",
-    "heroku-postbuild": "yarn start",
+    // "heroku-postbuild": "yarn start",
     "eject": "react-scripts eject"
   }
 }
