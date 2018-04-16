@@ -9,7 +9,7 @@ router.get('/', (req, res) => {
     Mongo.connect(url, function (err, conn) {
         if (err) {
             console.error(`ERROR getting movies: ${err}`);
-            console.error(`Attmempted with url: ${url}`);
+            // console.error(`Attmempted with url: ${url}`);
             res.status(500).send(err);
             return;
         }
