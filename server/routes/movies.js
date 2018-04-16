@@ -8,8 +8,10 @@ const dbName = process.env.MOVIE_DB;
 router.get('/', (req, res) => {
     Mongo.connect(url, function (err, conn) {
         if (err) {
-            console.error(`ERROR: ${err}`);
+            console.error(`ERROR getting movies: ${err}`);
+            console.error(`Attmempted with url: ${url}`);
             res.status(500).send(err);
+            return;
         }
 
         const db = conn.db(dbName);
@@ -25,7 +27,7 @@ router.get('/', (req, res) => {
 router.put('/', (req, res) => {
     Mongo.connect(url, function (err, conn) {
         if (err) {
-            console.error(`ERROR: ${err}`);
+            console.error(`ERROR upserting movie: ${err}`);
             res.status(500).send(err);
         }
 
@@ -44,7 +46,7 @@ router.put('/', (req, res) => {
 router.delete('/:id', (req, res) => {
     Mongo.connect(url, function (err, conn) {
         if (err) {
-            console.error(`ERROR: ${err}`);
+            console.error(`ERROR deleteing movie: ${err}`);
             res.status(500).send(err);
         }
 
