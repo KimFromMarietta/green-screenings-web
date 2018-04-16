@@ -10,6 +10,7 @@ import purple from 'material-ui/colors/purple';
 import pink from 'material-ui/colors/pink';
 
 import MovieList from './comp/movie-list/movie-list';
+import Filters from './comp/filters';
 
 
 class App extends Component {
@@ -48,6 +49,7 @@ class App extends Component {
     return (
       <MuiThemeProvider theme={theme}>
         <div className="App column items-center">
+          <Filters />
           <AppBar position="static" color="primary">
             <Toolbar>
               <h3>Green Screenings</h3>
