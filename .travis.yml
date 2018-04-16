@@ -9,3 +9,4 @@ deploy:
   branches:
     only:
     - master
+  skip_cleanup: true
