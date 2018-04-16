@@ -101,7 +101,7 @@ class MovieList extends React.Component {
                 return <MovieForm key={i} cancel={this.toggleEdit} submit={this.editMovie} delete={this.deleteMovie} movie={movie} />
             }
             return (
-                <div key={i} className={`wr-card row items-center flex-80 lt-sm-flex-90 ${i % 2 === 1 ? 'odd' : ''}`}>
+                <div key={i} className={`wr-card row items-center flex-100 ${i % 2 === 1 ? 'odd' : ''}`}>
                     <div className="flex-10 txt-c">
                         <Button onClick={() => this.toggleEdit(i)} style={{marginLeft: "-20px"}} variant="fab" mini color="primary">{i+1}</Button>
                     </div>
@@ -120,7 +120,7 @@ class MovieList extends React.Component {
 
         return (
             <div className="movie-list column items-center flex-100">
-                <div className={`row items-center flex-80 lt-sm-flex-90`}
+                <div className={`row items-center flex-100`}
                 style={{marginTop: "15px"}}>
                     <div className="txt-c flex-10"><Button style={{marginLeft: "-20px"}} color="primary" onClick={this.toggleEdit}>
                         <i className="material-icons">{this.state.addNew ? 'cancel' : 'add'}</i>

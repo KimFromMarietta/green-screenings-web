@@ -47,7 +47,7 @@ class App extends Component {
 
     return (
       <MuiThemeProvider theme={theme}>
-        <div className="App">
+        <div className="App column items-center">
           <AppBar position="static" color="primary">
             <Toolbar>
               <h3>Green Screenings</h3>
@@ -55,7 +55,9 @@ class App extends Component {
             </Toolbar>
           </AppBar>
           {!this.state.movies ? <LinearProgress color="secondary" /> :
-            <MovieList movies={this.state.movies} update={this.fetchMovies} />}
+            <div className="column flex-80 lt-sm-flex-90  gt-xl-flex-50">
+              <MovieList movies={this.state.movies} update={this.fetchMovies} />
+            </div>}
         </div>
       </MuiThemeProvider>
     );
