@@ -18,6 +18,7 @@
   },
   "scripts": {
     "dev": "react-scripts start",
+    "dev-serve": "concurrently 'yarn serve' 'yarn dev' 'yarn watch-css'",
     "watch-css": "node-sass-chokidar src/ -o src/ --watch --recursive",
     "build": "node-sass-chokidar src/ -o src/ && react-scripts build",
     "build-css": "node-sass-chokidar src/ -o src/",

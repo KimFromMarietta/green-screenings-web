@@ -11,6 +11,7 @@ import pink from 'material-ui/colors/pink';
 
 import MovieList from './comp/movie-list/movie-list';
 import Filters from './comp/filters';
+import Button from 'material-ui/Button';
 
 
 class App extends Component {
@@ -18,11 +19,13 @@ class App extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      movies: null
+      movies: null,
+      drawer: false
     }
 
     // bindings
     this.fetchMovies = this.fetchMovies.bind(this);
+    this.toggle = this.toggle.bind(this);
   }
 
   componentWillMount() {
@@ -37,6 +40,12 @@ class App extends Component {
     });
   }
 
+  toggle() {
+    this.setState({
+      drawer: !this.state.drawer
+    })
+  }
+
   render() {
     const theme = createMuiTheme({
       palette: {
@@ -49,9 +58,12 @@ class App extends Component {
     return (
       <MuiThemeProvider theme={theme}>
         <div className="App column items-center">
-          <Filters />
+          <Filters open={this.state.drawer} close={this.toggle} />
           <AppBar position="static" color="primary">
             <Toolbar>
+              <Button onClick={this.toggle}>
+                <i className="material-icons color-white">menu</i>
+              </Button>
               <h3>Green Screenings</h3>
               {/* <Button color="inherit">Login</Button> */}
             </Toolbar>
