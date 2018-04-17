@@ -40,6 +40,10 @@ class App extends Component {
     });
   }
 
+  filterMovies(filterSet) {
+    
+  }
+
   toggle() {
     this.setState({
       drawer: !this.state.drawer
@@ -58,7 +62,7 @@ class App extends Component {
     return (
       <MuiThemeProvider theme={theme}>
         <div className="App column items-center">
-          <Filters open={this.state.drawer} close={this.toggle} />
+          <Filters open={this.state.drawer} close={this.toggle} update={this.filterMovies} />
           <AppBar position="static" color="primary">
             <Toolbar>
               <Button onClick={this.toggle}>

@@ -13,7 +13,8 @@ class Filters extends React.Component {
         super(props);
         this.state = {
             tags: [],
-            open: this.props.open
+            open: this.props.open,
+            activeFilters: {}
         };
 
         // bindings
@@ -40,7 +41,10 @@ class Filters extends React.Component {
     }
 
     handleCheck(event) {
-        this.setState({ [event.target.value]: event.target.checked });
+        this.setState(
+            { 
+                activeFilters: Object.assign({}, this.state.activeFilters, {[event.target.key]: event.target.value}) 
+            });
     }
 
     close() {
@@ -58,7 +62,7 @@ class Filters extends React.Component {
                     style={{ margin: '-5px 20px' }}
                     control={
                         <Checkbox
-                            checked={this.state[val]}
+                            checked={this.state.activeFilters[val]}
                             onChange={this.handleCheck}
                             value={val}
                             color="primary"
