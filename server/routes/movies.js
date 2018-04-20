@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const Mongo = require('mongodb');
+const _ = require('lodash');
 
 const url = process.env.MONGO_URL;
 const dbName = process.env.MOVIE_DB;
@@ -20,6 +21,26 @@ router.get('/', (req, res) => {
 
         findDocuments(db, (docs) => {
             res.status(200).send(docs);
+        });
+    });
+});
+
+router.get('/tags', (req, res) => {
+    Mongo.connect(url, function (err, conn) {
+        if (err) {
+            console.error(`ERROR getting tags: ${err}`);
+            res.status(500).send(err);
+            return;
+        }
+
+        const db = conn.db(dbName);
+
+        console.log("Connected successfully to server");
+
+        findWithField({ tags: 1 }, db, (docs) => {
+            const result = docs.map((doc) => doc.tags)
+                .reduce((agg, tags) => _.union(agg, tags));
+            res.status(200).send(result);
         });
     });
 });
@@ -66,8 +87,15 @@ const findDocuments = function (db, callback) {
     const collection = db.collection('movies');
     // Find some documents
     collection.find({}).toArray(function (err, docs) {
-        console.log("Found the following movies");
-        console.log(docs)
+        callback(docs);
+    });
+}
+
+const findWithField = function (fields, db, callback) {
+    // Get the documents collection
+    const collection = db.collection('movies');
+    // Find some documents
+    collection.find({}).project(fields).toArray(function (err, docs) {
         callback(docs);
     });
 }
@@ -78,14 +106,14 @@ const upsertDocument = function (movie, db, callback) {
     // Find some documents
     const id = movie._id;
     delete movie._id;
-    collection.update({_id: new Mongo.ObjectID(id)}, movie, {upsert: true}).then(callback);
+    collection.update({ _id: new Mongo.ObjectID(id) }, movie, { upsert: true }).then(callback);
 }
 
 const removeDocument = function (id, db, callback) {
     // Get the documents collection
     const collection = db.collection('movies');
     // Find some documents
-    const result = collection.remove({_id: new Mongo.ObjectID(id)}).then(callback);
+    const result = collection.remove({ _id: new Mongo.ObjectID(id) }).then(callback);
 }
 
 module.exports = router;

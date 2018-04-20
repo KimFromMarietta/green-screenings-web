@@ -2,6 +2,7 @@ import React from 'react';
 import { PropTypes } from 'prop-types';
 
 import Button from 'material-ui/Button';
+import Chip from 'material-ui/Chip';
 
 class MovieForm extends React.Component {
 
@@ -34,6 +35,29 @@ class MovieForm extends React.Component {
         this.setState({ movie: movie });
     }
 
+    addTag(e) {
+        const value = e.target.value;
+        const movie = this.state.movie;
+        e.target.value = ""
+
+        if (!value ||
+            (movie.tags && movie.tags.includes(value)))
+            return;
+
+        const tags = movie.tags || [];
+        const updatedTags = [...tags, value];
+        let updatedMovie = Object.assign({}, movie, { tags: updatedTags });
+        this.setState({ movie: updatedMovie });
+    }
+
+    deleteTag(i) {
+        const movie = this.state.movie;
+        const tags = movie.tags || [];
+        const updatedTags = [...tags.slice(0, i), ...tags.slice(i + 1)];
+        let updatedMovie = Object.assign({}, movie, { tags: updatedTags });
+        this.setState({ movie: updatedMovie });
+    }
+
     calculateRating(movie) {
         const characterDev = (movie.characterRating + movie.performanceRating) / 2;
         const effects = (movie.visualRating + movie.soundRating) / 2;
@@ -43,8 +67,16 @@ class MovieForm extends React.Component {
     render() {
         const date = this.state.movie.releaseDate ? new Date(this.state.movie.releaseDate) : null;
         const dateString = date ? `${date.getFullYear()}-${('0' + (date.getMonth() + 1)).substr(-2)}-${('0' + date.getUTCDate()).substr(-2)}` : '';
+
+        const tagList = this.state.movie.tags ?
+            this.state.movie.tags.map((t, i) => {
+                return (
+                    <Chip key={i} label={t} onDelete={() => this.deleteTag(i)} style={{margin: '5px'}} />
+                )
+            }) : null;
+
         return (
-            <div className="movie-form column items-center flex-70">
+            <div className="movie-form column items-center flex-80">
                 <div className="row wrap items-center flex-100">
                     <input name="title" defaultValue={this.state.movie.title}
                         className="wr-mat-input flex-60 lt-md-flex-100" type="text"
@@ -74,6 +106,12 @@ class MovieForm extends React.Component {
                     <input name="soundRating" defaultValue={this.state.movie.soundRating}
                         className="wr-mat-input flex-15 lt-md-flex-35 txt-c" type="number"
                         max="10" min="1" placeholder="Sound" onBlur={(e) => this.handleInput(e)} />
+                </div>
+                <div className="row wrap flow-start flex-100">
+                    {tagList}
+                    <input name="tags"
+                        className="wr-mat-input fixed-100 txt-c" type="text"
+                        placeholder="add tag" onKeyPress={(e) => { if (e.key === 'Enter') this.addTag(e) }} />
                 </div>
                 <div className="row wrap flow-center flex-100">
                     <textarea name="comments" rows="1" placeholder="Comments" defaultValue={this.state.movie.comments}
