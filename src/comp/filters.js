@@ -14,7 +14,7 @@ class Filters extends React.Component {
         this.state = {
             tags: [],
             open: this.props.open,
-            tagFilter: {}
+            tagFilter: 'All'
         };
 
         // bindings
@@ -34,15 +34,17 @@ class Filters extends React.Component {
 
     getFilters() {
         axios.get('/api/movies/tags').then(res => {
+            let tags = res.data;
+            tags.unshift('All');
             this.setState({
-                tags: res.data
+                tags: tags
             })
         })
     }
 
     handleFilter(event) {
         this.setState({ [event.target.name]: event.target.value });
-        this.props.update(event.target.value);
+        this.props.update(event.target.value === 'All' ? null : event.target.value);
     }
 
     close() {
