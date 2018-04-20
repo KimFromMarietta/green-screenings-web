@@ -1,7 +1,7 @@
 import React from 'react';
 import Drawer from 'material-ui/Drawer';
 import { FormControlLabel } from 'material-ui/Form';
-import Checkbox from 'material-ui/Checkbox';
+import Radio, { RadioGroup } from 'material-ui/Radio';
 import Toolbar from 'material-ui/Toolbar';
 import Divider from 'material-ui/Divider';
 import Button from 'material-ui/Button';
@@ -14,11 +14,11 @@ class Filters extends React.Component {
         this.state = {
             tags: [],
             open: this.props.open,
-            activeFilters: {}
+            tagFilter: {}
         };
 
         // bindings
-        this.handleCheck = this.handleCheck.bind(this);
+        this.handleFilter = this.handleFilter.bind(this);
         this.close = this.close.bind(this);
     }
 
@@ -40,11 +40,9 @@ class Filters extends React.Component {
         })
     }
 
-    handleCheck(event) {
-        this.setState(
-            { 
-                activeFilters: Object.assign({}, this.state.activeFilters, {[event.target.key]: event.target.value}) 
-            });
+    handleFilter(event) {
+        this.setState({ [event.target.name]: event.target.value });
+        this.props.update(event.target.value);
     }
 
     close() {
@@ -60,14 +58,8 @@ class Filters extends React.Component {
                 <FormControlLabel
                     key={i}
                     style={{ margin: '-5px 20px' }}
-                    control={
-                        <Checkbox
-                            checked={this.state.activeFilters[val]}
-                            onChange={this.handleCheck}
-                            value={val}
-                            color="primary"
-                        />
-                    }
+                    value={val}
+                    control={ <Radio checked={this.state.tagFilter === val}/> }
                     label={val}
                 />
             )
@@ -79,7 +71,13 @@ class Filters extends React.Component {
                         <Button onClick={this.close}><i className="material-icons">chevron_left</i></Button>
                     </Toolbar>
                     <Divider />
-                    {tagList}
+                    <RadioGroup
+                        name="tagFilter"
+                        defaultValue={this.state.tagFilter}
+                        onChange={this.handleFilter}
+                    >
+                        {tagList}
+                    </RadioGroup>
                 </div>
             </Drawer>
         )

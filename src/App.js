@@ -26,9 +26,10 @@ class App extends Component {
     // bindings
     this.fetchMovies = this.fetchMovies.bind(this);
     this.toggle = this.toggle.bind(this);
+    this.updateFilters = this.updateFilters.bind(this);
   }
 
-  componentWillMount() {
+  componentDidMount() {
     this.fetchMovies();
   }
 
@@ -40,8 +41,18 @@ class App extends Component {
     });
   }
 
-  filterMovies(filterSet) {
-    
+  filterMovies() {
+    if (!this.state.movies) return [];
+    if (!this.state.tagFilter) return this.state.movies;
+    const filteredList = this.state.movies.filter(mov => {
+      return mov.tags && mov.tags.includes(this.state.tagFilter);
+    });
+
+    return filteredList;
+  }
+
+  updateFilters(filter) {
+    this.setState({tagFilter: filter});
   }
 
   toggle() {
@@ -59,10 +70,12 @@ class App extends Component {
       }
     });
 
+    const movieList = this.filterMovies();
+
     return (
       <MuiThemeProvider theme={theme}>
         <div className="App column items-center">
-          <Filters open={this.state.drawer} close={this.toggle} update={this.filterMovies} />
+          <Filters open={this.state.drawer} close={this.toggle} update={this.updateFilters} />
           <AppBar position="static" color="primary">
             <Toolbar>
               <Button onClick={this.toggle}>
@@ -74,7 +87,7 @@ class App extends Component {
           </AppBar>
           {!this.state.movies ? <LinearProgress color="secondary" /> :
             <div className="column flex-80 lt-sm-flex-90  gt-xl-flex-50">
-              <MovieList movies={this.state.movies} update={this.fetchMovies} />
+              <MovieList movies={movieList} update={this.fetchMovies} />
             </div>}
         </div>
       </MuiThemeProvider>
