@@ -26,20 +26,12 @@ class MovieList extends React.Component {
         this.deleteMovie = this.deleteMovie.bind(this);
     }
 
-    componentWillMount() {
-        this.setState({
-            movies: [...this.state.movies].sort((a, b) => {
+    static getDerivedStateFromProps(nextProps, prevState) {
+        return {
+            movies: [...nextProps.movies].sort((a, b) => {
                 return b.rating - a.rating;
             })
-        });
-    }
-
-    componentWillReceiveProps() {
-        this.setState({
-            movies: [...this.state.movies].sort((a, b) => {
-                return b.rating - a.rating;
-            })
-        });
+        }
     }
 
     static propTypes = {
@@ -66,7 +58,7 @@ class MovieList extends React.Component {
     addMovie(movie) {
         const updatedMovies = [...this.state.movies, movie];
         axios.put('/api/movies', movie).then(this.props.update);
-        this.setState({movies: updatedMovies});
+        this.setState({ movies: updatedMovies });
         this.toggleEdit();
     }
 
@@ -75,7 +67,7 @@ class MovieList extends React.Component {
         const i = this.state.editIndex;
         axios.put('/api/movies', movie).then(this.props.update);
         this.setState({
-            movies: [...movies.slice(0, i), movie, ...movies.slice(i+1)]
+            movies: [...movies.slice(0, i), movie, ...movies.slice(i + 1)]
         });
         this.toggleEdit();
     }
@@ -85,7 +77,7 @@ class MovieList extends React.Component {
         const i = this.state.editIndex;
         axios.delete(`/api/movies/${movies[i]._id}`).then(this.props.update);
         this.setState({
-            movies: [...movies.slice(0, i), ...movies.slice(i+1)]
+            movies: [...movies.slice(0, i), ...movies.slice(i + 1)]
         });
         this.toggleEdit();
     }
@@ -93,17 +85,22 @@ class MovieList extends React.Component {
     render() {
         const theme = this.props.theme;
 
+        console.debug('list view:', this.props.movies);
 
-        const highlightStyle = {color: theme.palette.secondary['800']};
+        const highlightStyle = { color: theme.palette.secondary['800'] };
 
-        const movieRows = this.state.movies.map((movie, i) => {
+        let rank = 1;
+        const movieRows = this.state.movies.map((movie, i, arr) => {
+            if (i > 0) {
+                if (movie.rating !== arr[i-1].rating) rank = i + 1;
+            }
             if (this.state.editIndex === i) {
                 return <MovieForm key={i} cancel={this.toggleEdit} submit={this.editMovie} delete={this.deleteMovie} movie={movie} />
             }
             return (
-                <div key={i} className={`wr-card row items-center flex-80 lt-sm-flex-90 ${i % 2 === 1 ? 'odd' : ''}`}>
+                <div key={i} className={`wr-card row items-center flex-100 ${i % 2 === 1 ? 'odd' : ''}`}>
                     <div className="flex-10 txt-c">
-                        <Button onClick={() => this.toggleEdit(i)} style={{marginLeft: "-20px"}} variant="fab" mini color="primary">{i+1}</Button>
+                        <Button onClick={() => this.toggleEdit(i)} style={{ marginLeft: "-20px" }} variant="fab" mini color="primary">{rank}</Button>
                     </div>
                     <h2 className="flex-45 lt-md-flex-75">{movie.title}</h2>
                     <h2 className="txt-c flex-15" style={highlightStyle}>
@@ -120,9 +117,9 @@ class MovieList extends React.Component {
 
         return (
             <div className="movie-list column items-center flex-100">
-                <div className={`row items-center flex-80 lt-sm-flex-90`}
-                style={{marginTop: "15px"}}>
-                    <div className="txt-c flex-10"><Button style={{marginLeft: "-20px"}} color="primary" onClick={this.toggleEdit}>
+                <div className={`row items-center flex-100`}
+                    style={{ marginTop: "15px" }}>
+                    <div className="txt-c flex-10"><Button style={{ marginLeft: "-20px" }} color="primary" onClick={this.toggleEdit}>
                         <i className="material-icons">{this.state.addNew ? 'cancel' : 'add'}</i>
                     </Button></div>
                     <Typography variant="subheading" color="primary" className="txt-c flex-45 lt-md-flex-75">Title</Typography>
