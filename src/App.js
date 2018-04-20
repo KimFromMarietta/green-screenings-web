@@ -34,7 +34,7 @@ class App extends Component {
   }
 
   fetchMovies() {
-    axios.get('/api/movies').then((res) => {
+    axios.get('/api/ratings').then((res) => {
       this.setState({
         movies: res.data
       });

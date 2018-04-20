@@ -1,11 +1,12 @@
 var express = require('express');
 var bodyParser = require('body-parser');
 var app     = express();
-var port    = process.env.PORT || 5000;
+var port    = process.env.PORT || 4000;
 
 app.use(bodyParser.json()); // support json encoded bodies
 app.use(bodyParser.urlencoded({ extended: true })); // support encoded bodies
 app.use('/api', require('./routes/index'));
+app.use('/api/ratings', require('./routes/ratings'));
 app.use('/api/movies', require('./routes/movies'));
 
 app.use('/', express.static('build'));

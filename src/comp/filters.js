@@ -33,7 +33,7 @@ class Filters extends React.Component {
     }
 
     getFilters() {
-        axios.get('/api/movies/tags').then(res => {
+        axios.get('/api/ratings/tags').then(res => {
             let tags = res.data;
             tags.unshift('All');
             this.setState({

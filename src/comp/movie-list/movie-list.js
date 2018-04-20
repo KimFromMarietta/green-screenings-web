@@ -15,7 +15,7 @@ class MovieList extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            addNew: false,
+            addNew: true,
             editIndex: null,
             movies: this.props.movies
         }
@@ -57,7 +57,7 @@ class MovieList extends React.Component {
 
     addMovie(movie) {
         const updatedMovies = [...this.state.movies, movie];
-        axios.put('/api/movies', movie).then(this.props.update);
+        axios.put('/api/ratings', movie).then(this.props.update);
         this.setState({ movies: updatedMovies });
         this.toggleEdit();
     }
@@ -65,7 +65,7 @@ class MovieList extends React.Component {
     editMovie(movie) {
         const movies = this.state.movies;
         const i = this.state.editIndex;
-        axios.put('/api/movies', movie).then(this.props.update);
+        axios.put('/api/ratings', movie).then(this.props.update);
         this.setState({
             movies: [...movies.slice(0, i), movie, ...movies.slice(i + 1)]
         });
@@ -75,7 +75,7 @@ class MovieList extends React.Component {
     deleteMovie() {
         const movies = this.state.movies;
         const i = this.state.editIndex;
-        axios.delete(`/api/movies/${movies[i]._id}`).then(this.props.update);
+        axios.delete(`/api/ratings/${movies[i]._id}`).then(this.props.update);
         this.setState({
             movies: [...movies.slice(0, i), ...movies.slice(i + 1)]
         });
@@ -84,8 +84,6 @@ class MovieList extends React.Component {
 
     render() {
         const theme = this.props.theme;
-
-        console.debug('list view:', this.props.movies);
 
         const highlightStyle = { color: theme.palette.secondary['800'] };
 
