@@ -89,14 +89,18 @@ class MovieList extends React.Component {
 
         const highlightStyle = { color: theme.palette.secondary['800'] };
 
-        const movieRows = this.state.movies.map((movie, i) => {
+        let rank = 1;
+        const movieRows = this.state.movies.map((movie, i, arr) => {
+            if (i > 0) {
+                if (movie.rating !== arr[i-1].rating) rank = i + 1;
+            }
             if (this.state.editIndex === i) {
                 return <MovieForm key={i} cancel={this.toggleEdit} submit={this.editMovie} delete={this.deleteMovie} movie={movie} />
             }
             return (
                 <div key={i} className={`wr-card row items-center flex-100 ${i % 2 === 1 ? 'odd' : ''}`}>
                     <div className="flex-10 txt-c">
-                        <Button onClick={() => this.toggleEdit(i)} style={{ marginLeft: "-20px" }} variant="fab" mini color="primary">{i + 1}</Button>
+                        <Button onClick={() => this.toggleEdit(i)} style={{ marginLeft: "-20px" }} variant="fab" mini color="primary">{rank}</Button>
                     </div>
                     <h2 className="flex-45 lt-md-flex-75">{movie.title}</h2>
                     <h2 className="txt-c flex-15" style={highlightStyle}>
