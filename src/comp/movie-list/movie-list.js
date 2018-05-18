@@ -6,7 +6,7 @@ import Typography from 'material-ui/Typography'
 import axios from 'axios';
 
 import './movie-list.css';
-import MovieForm from '../movie-form';
+import MovieForm from '../movie-form/movie-form';
 import NumberView from '../number-view';
 import { isNumber } from 'util';
 
@@ -15,7 +15,7 @@ class MovieList extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            addNew: true,
+            addNew: false,
             editIndex: null,
             movies: this.props.movies
         }
@@ -102,13 +102,13 @@ class MovieList extends React.Component {
                     </div>
                     <h2 className="flex-45 lt-md-flex-75">{movie.title}</h2>
                     <h2 className="txt-c flex-15" style={highlightStyle}>
-                        {<NumberView value={movie.rating} decimalPlaces={2} /> || '-'}
+                        {<NumberView value={movie.wRating} decimalPlaces={2} /> || '-'}
                     </h2>
-                    <p className="txt-c flex-5 lt-md-hide">{movie.storyRating || '-'}</p>
-                    <p className="txt-c flex-5 lt-md-hide">{movie.characterRating || '-'}</p>
-                    <p className="txt-c flex-5 lt-md-hide">{movie.performanceRating || '-'}</p>
-                    <p className="txt-c flex-5 lt-md-hide">{movie.visualRating || '-'}</p>
-                    <p className="txt-c flex-5 lt-md-hide">{movie.soundRating || '-'}</p>
+                    <p className="txt-c flex-5 lt-md-hide">{movie.wStoryRating || '-'}</p>
+                    <p className="txt-c flex-5 lt-md-hide">{movie.wCharacterRating || '-'}</p>
+                    <p className="txt-c flex-5 lt-md-hide">{movie.wPerformanceRating || '-'}</p>
+                    <p className="txt-c flex-5 lt-md-hide">{movie.wVisualRating || '-'}</p>
+                    <p className="txt-c flex-5 lt-md-hide">{movie.wSoundRating || '-'}</p>
                 </div>
             )
         });

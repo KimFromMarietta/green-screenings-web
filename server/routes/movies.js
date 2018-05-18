@@ -17,6 +17,7 @@ router.get('/', (req, res) => {
 });
 
 router.get('/:id', (req, res) => {
+    console.log(`getting movie id: '${req.params['id']}'`);
     imdb.getById(req.params['id'], { apiKey: apiKey })
     .then(result => {
             res.status(200).send(result);
