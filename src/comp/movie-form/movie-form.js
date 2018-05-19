@@ -76,8 +76,6 @@ class MovieForm extends React.Component {
     render() {
         const movie = this.state.movie;
         console.debug('movie', movie);
-        const date = movie ? new Date(movie.released) : null;
-        const dateString = date ? `${date.getFullYear()}-${('0' + (date.getMonth() + 1)).substr(-2)}-${('0' + date.getUTCDate()).substr(-2)}` : '';
 
         const tagList = movie && movie.tags ?
             movie.tags.map((t, i) => {
