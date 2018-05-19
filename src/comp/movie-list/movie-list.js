@@ -29,7 +29,7 @@ class MovieList extends React.Component {
     static getDerivedStateFromProps(nextProps, prevState) {
         return {
             movies: [...nextProps.movies].sort((a, b) => {
-                return b.rating - a.rating;
+                return b.wRating - a.wRating;
             })
         }
     }
