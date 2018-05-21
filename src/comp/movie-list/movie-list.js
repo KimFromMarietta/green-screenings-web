@@ -2,13 +2,14 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import Button from 'material-ui/Button';
 import { withTheme } from 'material-ui/styles';
-import Typography from 'material-ui/Typography'
+import Typography from 'material-ui/Typography';
 import axios from 'axios';
 
 import './movie-list.css';
 import MovieForm from '../movie-form/movie-form';
 import NumberView from '../number-view';
 import { isNumber } from 'util';
+import MovieDialog from '../movie-details/movie-dialog';
 
 class MovieList extends React.Component {
 
@@ -82,6 +83,12 @@ class MovieList extends React.Component {
         this.toggleEdit();
     }
 
+    viewDetails(i) {
+        this.setState({
+            openIndex: i
+        })
+    }
+
     render() {
         const theme = this.props.theme;
 
@@ -98,7 +105,7 @@ class MovieList extends React.Component {
             return (
                 <div key={i} className={`wr-card row items-center flex-100 ${i % 2 === 1 ? 'odd' : ''}`}>
                     <div className="flex-10 txt-c">
-                        <Button onClick={() => this.toggleEdit(i)} style={{ marginLeft: "-20px" }} variant="fab" mini color="primary">{rank}</Button>
+                        <Button onClick={() => this.viewDetails(i)} style={{ marginLeft: "-20px" }} variant="fab" mini color="primary">{rank}</Button>
                     </div>
                     <h2 className="flex-45 lt-md-flex-75">{movie.title}</h2>
                     <h2 className="txt-c flex-15" style={highlightStyle}>
@@ -109,6 +116,7 @@ class MovieList extends React.Component {
                     <p className="txt-c flex-5 lt-md-hide">{movie.wPerformanceRating || '-'}</p>
                     <p className="txt-c flex-5 lt-md-hide">{movie.wVisualRating || '-'}</p>
                     <p className="txt-c flex-5 lt-md-hide">{movie.wSoundRating || '-'}</p>
+                    <MovieDialog movie={movie} rank={rank} open={this.state.openIndex === i} onClose={() => this.viewDetails(null)}/>
                 </div>
             )
         });

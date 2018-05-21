@@ -1,0 +1,33 @@
+img {
+    height: 150px;
+    margin-right: 20px;
+    cursor: pointer;
+}
+
+.user-rating {
+    margin-top: -20px;
+    margin-bottom: 10px;
+}
+
+.wr-card {
+    padding: 5px;
+}
+
+#rating, 
+.ext-rating {
+    background-color: #eceff1;
+}
+
+#story-rating {
+    background-color: #ffcdd2;
+}
+
+#char-rating,
+#perf-rating {
+    background-color: #bbdefb;
+}
+
+#visual-rating,
+#sound-rating {
+    background-color: #fff9c4;
+}
