@@ -45,6 +45,32 @@ router.get('/tags', (req, res) => {
     });
 });
 
+router.get('/years', (req, res) => {
+    Mongo.connect(url, function (err, conn) {
+        if (err) {
+            console.error(`ERROR getting years: ${err}`);
+            res.status(500).send(err);
+            return;
+        }
+
+        const db = conn.db(dbName);
+
+        console.log("Connected successfully to server");
+
+        findWithField({ year: 1 }, db, (docs) => {
+            const result = docs.map((doc) => doc.year)
+                .reduce((agg, year) => {
+                    if (!agg) agg = [];
+                    year += "";
+                    if (agg.indexOf(year) < 0) agg.push(year);
+                    return agg;
+                }, []);
+            result.sort((a, b) => b - a);
+            res.status(200).send(result);
+        });
+    });
+});
+
 router.put('/', (req, res) => {
     Mongo.connect(url, function (err, conn) {
         if (err) {

@@ -3,6 +3,7 @@ import axios from 'axios';
 
 import AppBar from 'material-ui/AppBar';
 import Toolbar from 'material-ui/Toolbar';
+import Drawer from 'material-ui/Drawer';
 import { LinearProgress } from 'material-ui/Progress';
 import { MuiThemeProvider, createMuiTheme } from 'material-ui/styles';
 import teal from 'material-ui/colors/teal';
@@ -20,17 +21,24 @@ class App extends Component {
     super(props);
     this.state = {
       movies: null,
+      tags: null,
+      years: null,
       drawer: false
     }
 
     // bindings
     this.fetchMovies = this.fetchMovies.bind(this);
+    this.getFilters = this.getFilters.bind(this);
+    this.getYears = this.getYears.bind(this);
     this.toggle = this.toggle.bind(this);
-    this.updateFilters = this.updateFilters.bind(this);
+    this.updateFilter = this.updateFilter.bind(this);
+    this.updateYear = this.updateYear.bind(this);
   }
 
   componentDidMount() {
     this.fetchMovies();
+    this.getFilters();
+    this.getYears();
   }
 
   fetchMovies() {
@@ -41,18 +49,52 @@ class App extends Component {
     });
   }
 
-  filterMovies() {
-    if (!this.state.movies) return [];
-    if (!this.state.tagFilter) return this.state.movies;
-    const filteredList = this.state.movies.filter(mov => {
-      return mov.tags && mov.tags.includes(this.state.tagFilter);
-    });
-
-    return filteredList;
+  getFilters() {
+    axios.get('/api/ratings/tags').then(res => {
+      let tags = res.data;
+      tags.unshift('All');
+      this.setState({
+        tags: tags
+      })
+    })
   }
 
-  updateFilters(filter) {
-    this.setState({tagFilter: filter});
+  getYears() {
+    axios.get('/api/ratings/years').then(res => {
+      let years = res.data;
+      years.unshift('All');
+      this.setState({
+        years: years,
+        yearFilter: years[1]
+      })
+    })
+  }
+
+  filterMovies() {
+    if (!this.state.movies) return [];
+    let res = [...this.state.movies];
+    
+    if (this.state.tagFilter) {
+      res = res.filter(mov => {
+        return mov.tags && mov.tags.includes(this.state.tagFilter);
+      });
+    }
+
+    if (this.state.yearFilter) {
+      res = res.filter(mov => {
+        return mov.year && ("" + mov.year) === this.state.yearFilter;
+      });
+    }
+
+    return res;
+  }
+
+  updateFilter(filter) {
+    this.setState({ tagFilter: filter });
+  }
+
+  updateYear(filter) {
+    this.setState({ yearFilter: filter });
   }
 
   toggle() {
@@ -75,7 +117,15 @@ class App extends Component {
     return (
       <MuiThemeProvider theme={theme}>
         <div className="App column items-center">
-          <Filters open={this.state.drawer} close={this.toggle} update={this.updateFilters} />
+          <Drawer variant="persistent" open={this.state.drawer}>
+            <div className="column fixed-300">
+              <Toolbar>
+                <Button onClick={this.toggle}><i className="material-icons">chevron_left</i></Button>
+              </Toolbar>
+              {this.state.years ? <Filters tags={this.state.years} tagFilter={this.state.yearFilter} update={this.updateYear} title="Release Year" /> : null}
+              {this.state.tags ? <Filters tags={this.state.tags} update={this.updateFilter} title="Tags" /> : null}
+            </div>
+          </Drawer>
           <AppBar position="static" color="primary">
             <Toolbar>
               <Button onClick={this.toggle}>
