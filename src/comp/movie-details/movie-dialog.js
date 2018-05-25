@@ -1,9 +1,11 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import Button from 'material-ui/Button';
-import Dialog, { DialogTitle } from 'material-ui/Dialog';
-import Typography from 'material-ui/Typography'
-import Chip from 'material-ui/Chip';
+import Button from '@material-ui/core/Button';
+import Dialog from '@material-ui/core/Dialog';
+import DialogTitle from '@material-ui/core/DialogTitle';
+import Typography from '@material-ui/core/Typography';
+import TextField from '@material-ui/core/TextField';
+import Chip from '@material-ui/core/Chip';
 
 import './movie-details.css';
 import NumberView from '../number-view';
@@ -50,8 +52,7 @@ class MovieDialog extends React.Component {
         })
     }
 
-    handleInput(e) {
-        const key = e.target.name;
+    handleInput = key => e => {
         const value = key === 'title' || key === 'comments' ? e.target.value :
             key === 'releaseDate' ? new Date(e.target.value).getTime() : +e.target.value;
         let movie = Object.assign({}, this.state.movie, { [e.target.name]: value });
@@ -124,44 +125,46 @@ class MovieDialog extends React.Component {
                 </i></Button>
                 <div className="column" style={{ padding: '10px' }}>
                     <div className="row flow-center wrap">
+                        <div className="column">
+                            <TextField
+                                id="wStoryRating"
+                                label="Story"
+                                value={movie.wStoryRating}
+                                onChange={this.handleInput('wStoryRating')}
+                                margin="normal"
+                            />
+                            <TextField
+                                id="wCharacterRating"
+                                label="Story"
+                                value={movie.wCharacterRating}
+                                onChange={this.handleInput('wCharacterRating')}
+                                margin="normal"
+                            />
+                            <TextField
+                                id="wPerformanceRating"
+                                label="Story"
+                                value={movie.wPerformanceRating}
+                                onChange={this.handleInput('wPerformanceRating')}
+                                margin="normal"
+                            />
+                            <TextField
+                                id="wVisualRating"
+                                label="Story"
+                                value={movie.wVisualRating}
+                                onChange={this.handleInput('wVisualRating')}
+                                margin="normal"
+                            />
+                            <TextField
+                                id="wSoundRating"
+                                label="Story"
+                                value={movie.wSoundRating}
+                                onChange={this.handleInput('wSoundRating')}
+                                margin="normal"
+                            />
+                        </div>
                         <div id="rating" className="wr-card column items-center flex-20 lt-sm-flex-100 user-rating">
                             <p>My rating</p>
                             <h2><NumberView value={movie.wRating} decimalPlaces={2} /> / 10</h2>
-                        </div>
-                        <div id="story-rating" className="wr-card column items-center lt-sm-flex-40 user-rating">
-                            <p>Story</p>
-                            {!this.state.edit ? <h2>{movie.wStoryRating} / 10</h2> :
-                                <input name="wStoryRating" defaultValue={movie.wStoryRating}
-                                    className="wr-mat-input fixed-50 txt-c" type="number"
-                                    max="10" min="1" placeholder="Stor" onBlur={(e) => this.handleInput(e)} />}
-                        </div>
-                        <div id="char-rating" className="wr-card column items-center lt-sm-flex-40 user-rating">
-                            <p>Char</p>
-                            {!this.state.edit ? <h2>{movie.wCharacterRating} / 10</h2> :
-                                <input name="wCharacterRating" defaultValue={movie.wCharacterRating}
-                                    className="wr-mat-input fixed-50 txt-c" type="number"
-                                    max="10" min="1" placeholder="Stor" onBlur={(e) => this.handleInput(e)} />}
-                        </div>
-                        <div id="perf-rating" className="wr-card column items-center lt-sm-flex-40 user-rating">
-                            <p>Perf</p>
-                            {!this.state.edit ? <h2>{movie.wPerformanceRating} / 10</h2> :
-                                <input name="wPerformanceRating" defaultValue={movie.wPerformanceRating}
-                                    className="wr-mat-input fixed-50 txt-c" type="number"
-                                    max="10" min="1" placeholder="Stor" onBlur={(e) => this.handleInput(e)} />}
-                        </div>
-                        <div id="visual-rating" className="wr-card column items-center lt-sm-flex-40 user-rating">
-                            <p>Visuals</p>
-                            {!this.state.edit ? <h2>{movie.wVisualRating} / 10</h2> :
-                                <input name="wVisualRating" defaultValue={movie.wVisualRating}
-                                    className="wr-mat-input fixed-50 txt-c" type="number"
-                                    max="10" min="1" placeholder="Stor" onBlur={(e) => this.handleInput(e)} />}
-                        </div>
-                        <div id="sound-rating" className="wr-card column items-center lt-sm-flex-40 user-rating">
-                            <p>Sounds</p>
-                            {!this.state.edit ? <h2>{movie.wSoundRating} / 10</h2> :
-                                <input name="wSoundRating" defaultValue={movie.wSoundRating}
-                                    className="wr-mat-input fixed-50 txt-c" type="number"
-                                    max="10" min="1" placeholder="Stor" onBlur={(e) => this.handleInput(e)} />}
                         </div>
                     </div>
                     <div className="row">
@@ -197,7 +200,7 @@ class MovieDialog extends React.Component {
                     {!this.state.edit ? null :
                         <div className="row flow-end flex-100">
                             <Button onClick={() => { this.props.delete(); this.close(); }} color="secondary">Delete</Button>
-                            <Button onClick={() => {this.props.submit(movie); this.close();}}
+                            <Button onClick={() => { this.props.submit(movie); this.close(); }}
                                 disabled={!movie.title || !movie.released}
                                 variant="raised" color="primary">Sumbit</Button>
                         </div>}

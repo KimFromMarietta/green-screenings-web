@@ -1,18 +1,18 @@
 import React, { Component } from 'react';
 import axios from 'axios';
 
-import AppBar from 'material-ui/AppBar';
-import Toolbar from 'material-ui/Toolbar';
-import Drawer from 'material-ui/Drawer';
-import { LinearProgress } from 'material-ui/Progress';
-import { MuiThemeProvider, createMuiTheme } from 'material-ui/styles';
-import teal from 'material-ui/colors/teal';
-import purple from 'material-ui/colors/purple';
-import pink from 'material-ui/colors/pink';
+import AppBar from '@material-ui/core/AppBar';
+import Toolbar from '@material-ui/core/Toolbar';
+import Drawer from '@material-ui/core/Drawer';
+import LinearProgress from '@material-ui/core/LinearProgress';
+import { MuiThemeProvider, createMuiTheme } from '@material-ui/core/styles';
+import teal from '@material-ui/core/colors/teal';
+import purple from '@material-ui/core/colors/purple';
+import pink from '@material-ui/core/colors/pink';
 
 import MovieList from './comp/movie-list/movie-list';
 import Filters from './comp/filters';
-import Button from 'material-ui/Button';
+import Button from '@material-ui/core/Button';
 
 
 class App extends Component {
@@ -65,7 +65,7 @@ class App extends Component {
       years.unshift('All');
       this.setState({
         years: years,
-        yearFilter: years[1]
+        yearFilter: years[1] ? years[1] : years[0]
       })
     })
   }

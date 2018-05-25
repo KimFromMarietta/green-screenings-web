@@ -1,8 +1,8 @@
 import React from 'react';
 import { PropTypes } from 'prop-types';
 
-import Button from 'material-ui/Button';
-import Chip from 'material-ui/Chip';
+import Button from '@material-ui/core/Button';
+import Chip from '@material-ui/core/Chip';
 import axios from 'axios';
 
 import MovieSearch from '../movie-search/movie-search';

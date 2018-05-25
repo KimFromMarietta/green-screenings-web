@@ -1,8 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import Button from 'material-ui/Button';
-import { withTheme } from 'material-ui/styles';
-import Typography from 'material-ui/Typography';
+import Button from '@material-ui/core/Button';
+import { withTheme } from '@material-ui/core/styles';
+import Typography from '@material-ui/core/Typography';
 import axios from 'axios';
 
 import './movie-list.css';

@@ -1,7 +1,7 @@
 import React from 'react';
 import axios from 'axios';
 
-import List, { ListItem } from 'material-ui/List';
+import List, { ListItem } from '@material-ui/core/List';
 
 import './movie-search.css';
 
