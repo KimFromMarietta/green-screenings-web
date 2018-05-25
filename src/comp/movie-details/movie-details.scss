@@ -1,3 +1,7 @@
+[class^='MuiDialog'], [class*=' MuiDialog'] {
+    display: block !important;
+}
+
 img {
     height: 150px;
     margin-right: 20px;
@@ -5,7 +9,7 @@ img {
 }
 
 .user-rating {
-    margin-top: -20px;
+    // margin-top: -20px;
     margin-bottom: 10px;
 }
 

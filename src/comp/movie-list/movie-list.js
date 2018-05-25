@@ -8,7 +8,6 @@ import axios from 'axios';
 import './movie-list.css';
 import MovieForm from '../movie-form/movie-form';
 import NumberView from '../number-view';
-import { isNumber } from 'util';
 import MovieDialog from '../movie-details/movie-dialog';
 
 class MovieList extends React.Component {
@@ -41,19 +40,9 @@ class MovieList extends React.Component {
     }
 
     toggleEdit(i) {
-        if (isNumber(i)) {
-            this.setState({
-                editIndex: i
-            });
-        } else if (isNumber(this.state.editIndex)) {
-            this.setState({
-                editIndex: null
-            });
-        } else {
-            this.setState({
-                addNew: !this.state.addNew
-            });
-        }
+        this.setState({
+            addNew: !this.state.addNew
+        });
     }
 
     addMovie(movie) {
@@ -70,17 +59,14 @@ class MovieList extends React.Component {
         this.setState({
             movies: [...movies.slice(0, i), movie, ...movies.slice(i + 1)]
         });
-        this.toggleEdit();
     }
 
-    deleteMovie() {
+    deleteMovie(i) {
         const movies = this.state.movies;
-        const i = this.state.editIndex;
         axios.delete(`/api/ratings/${movies[i]._id}`).then(this.props.update);
         this.setState({
             movies: [...movies.slice(0, i), ...movies.slice(i + 1)]
         });
-        this.toggleEdit();
     }
 
     viewDetails(i) {
@@ -94,16 +80,15 @@ class MovieList extends React.Component {
 
         const highlightStyle = { color: theme.palette.secondary['800'] };
 
+        console.debug(this.state.openIndex);
+
         let rank = 1;
         const movieRows = this.state.movies.map((movie, i, arr) => {
             if (i > 0) {
-                if (movie.rating !== arr[i-1].rating) rank = i + 1;
-            }
-            if (this.state.editIndex === i) {
-                return <MovieForm key={i} cancel={this.toggleEdit} submit={this.editMovie} delete={this.deleteMovie} movie={movie} />
+                if (movie.rating !== arr[i - 1].rating) rank = i + 1;
             }
             return (
-                <div key={i} className={`wr-card row items-center flex-100 ${i % 2 === 1 ? 'odd' : ''}`}>
+                <div key={i} className={`wr-card row items-center flex-100`}>
                     <div className="flex-10 txt-c">
                         <Button onClick={() => this.viewDetails(i)} style={{ marginLeft: "-20px" }} variant="fab" mini color="primary">{rank}</Button>
                     </div>
@@ -116,7 +101,8 @@ class MovieList extends React.Component {
                     <p className="txt-c flex-5 lt-md-hide">{movie.wPerformanceRating || '-'}</p>
                     <p className="txt-c flex-5 lt-md-hide">{movie.wVisualRating || '-'}</p>
                     <p className="txt-c flex-5 lt-md-hide">{movie.wSoundRating || '-'}</p>
-                    <MovieDialog movie={movie} rank={rank} open={this.state.openIndex === i} onClose={() => this.viewDetails(null)}/>
+                    <MovieDialog movie={movie} rank={rank} open={this.state.openIndex === i} onClose={() => this.viewDetails(null)}
+                        submit={this.editMovie} delete={() => this.deleteMovie(i)} />
                 </div>
             )
         });
