@@ -76,7 +76,25 @@ router.put('/', (req, res) => {
 
         const db = conn.db(dbName);
 
-        const movie = req.body;
+        const movie = {
+            _id: req.body._id,
+            imdbid: req.body.imdbid,
+            imdburl: req.body.imdburl,
+            title: req.body.title,
+            rated: req.body.rated,
+            year: req.body.year,
+            released: req.body.released,
+            runtime: req.body.runtime,
+            director: req.body.director,
+            writer: req.body.writer,
+            actors: req.body.actors,
+            plot: req.body.plot,
+            poster: req.body.poster,
+            ratings: req.body.ratings,
+            greenRating: req.body.greenRating,
+            greenFactors: req.body.greenFactors,
+            tags: req.body.tags
+        };
         console.log(`Connected successfully, attempting to ${movie._id ? 'update' : 'insert'} ${movie.title}`);
 
         if (!movie.imdbid) res.status(422).send({ error: 'invalid movie: no imdbid found' });

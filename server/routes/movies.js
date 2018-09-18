@@ -6,6 +6,10 @@ const apiKey = process.env.IMDB_API_KEY;
 const url = `http://www.omdbapi.com/?apikey=${apiKey}`;
 
 router.get('/', (req, res) => {
+  if (!req.query.title) {
+    res.send('please provide a \'title\' query to search for. ');
+    return;
+  } 
   console.log(`searching for movies like '${req.query.title}'`);
   http.get(`${url}&s=${req.query.title}`, response => {
     let data = '';
