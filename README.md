@@ -1,6 +1,6 @@
 ## green-screenings-api
 
-This apis is for managing personal movie ratings for the React Native project (GreenScreenings)[https://github.com/kjintroverted/green-screenings]. It leverages the (OMDB API)[http://www.omdbapi.com/] for movie data and adds an personalized rating system.
+This api is for managing personal movie ratings for the React Native project [GreenScreenings](https://github.com/kjintroverted/green-screenings). It leverages the [OMDB API](http://www.omdbapi.com/) for movie data and adds an personalized rating system.
 
 Currently hosted on a Heroku free dyno, so responses may be slower than expected.
 
