@@ -22,7 +22,7 @@
     "watch-css": "node-sass-chokidar src/ -o src/ --watch --recursive",
     "build": "node-sass-chokidar src/ -o src/ && react-scripts build",
     "build-css": "node-sass-chokidar src/ -o src/",
-    "start": "yarn build && node server/app.js",
+    "start": "node server/app.js",
     "serve": "nodemon server/app.js",
     "test": "echo 'tests disabled'",
     "eject": "react-scripts eject"
