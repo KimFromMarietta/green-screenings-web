@@ -1,7 +1,6 @@
 const express = require('express');
 const router = express.Router();
 const Mongo = require('mongodb');
-const _ = require('lodash');
 
 const url = process.env.MONGO_URL;
 const dbName = process.env.MOVIE_DB;
