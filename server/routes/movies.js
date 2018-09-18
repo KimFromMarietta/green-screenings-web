@@ -1,6 +1,5 @@
 const express = require('express');
 const router = express.Router();
-const imdb = require('imdb-api');
 const http = require('http');
 
 const apiKey = process.env.IMDB_API_KEY;

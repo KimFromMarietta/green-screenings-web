@@ -39,7 +39,8 @@ router.get('/tags', (req, res) => {
 
         findWithField({ tags: 1 }, db, (docs) => {
             const result = docs.map((doc) => doc.tags)
-                .reduce((agg, tags) => _.union(agg, tags), []);
+                .reduce((agg, arr) => [...agg, ...arr], [])
+                .reduce((agg, tag) => !agg.includes(tag) ? [...agg, tag] : agg, []);
             res.status(200).send(result);
         });
     });
@@ -57,8 +58,8 @@ router.put('/', (req, res) => {
         const movie = req.body;
         console.log(`Connected successfully, attempting to ${movie._id ? 'update' : 'insert'} ${movie.title}`);
 
-        if (!movie.imdbid) res.status(422).send({error: 'invalid movie: no imdbid found'});
-        
+        if (!movie.imdbid) res.status(422).send({ error: 'invalid movie: no imdbid found' });
+
         upsertDocument(movie, db, (result) => {
             console.log(result.result);
             res.status(200).send(result.result);
