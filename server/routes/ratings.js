@@ -39,7 +39,8 @@ router.get('/tags', (req, res) => {
         findWithField({ tags: 1 }, db, (docs) => {
             const result = docs.map((doc) => doc.tags)
                 .reduce((agg, arr) => [...agg, ...arr], [])
-                .reduce((agg, tag) => !agg.includes(tag) ? [...agg, tag] : agg, []);
+                .reduce((agg, tag) => !agg.includes(tag) ? [...agg, tag] : agg, [])
+                .sort();
             res.status(200).send(result);
         });
     });
