@@ -24,6 +24,45 @@ router.get('/', (req, res) => {
     });
 });
 
+router.put('/', (req, res) => {
+    Mongo.connect(url, function (err, conn) {
+        if (err) {
+            console.error(`ERROR upserting movie: ${err}`);
+            res.status(500).send(err);
+        }
+
+        const db = conn.db(dbName);
+
+        const movie = {
+            _id: req.body._id,
+            imdbid: req.body.imdbid,
+            imdburl: req.body.imdburl,
+            title: req.body.title,
+            rated: req.body.rated,
+            year: req.body.year,
+            released: req.body.released,
+            runtime: req.body.runtime,
+            director: req.body.director,
+            writer: req.body.writer,
+            actors: req.body.actors,
+            plot: req.body.plot,
+            poster: req.body.poster,
+            ratings: req.body.ratings,
+            greenRating: req.body.greenRating,
+            greenFactors: req.body.greenFactors,
+            tags: req.body.tags
+        };
+        console.log(`Connected successfully, attempting to ${movie._id ? 'update' : 'insert'} ${movie.title}`);
+
+        if (!movie.imdbid) res.status(422).send({ error: 'invalid movie: no imdbid found' });
+
+        upsertDocument(movie, db, (result) => {
+            console.log(result.result);
+            res.status(200).send(result.result);
+        });
+    });
+});
+
 router.get('/tags', (req, res) => {
     Mongo.connect(url, function (err, conn) {
         if (err) {
@@ -63,45 +102,6 @@ router.get('/years', (req, res) => {
                 .reduce((agg, tag) => !agg.includes(tag) ? [...agg, tag] : agg, [])
                 .sort((a, b) => b - a);
             res.status(200).send(result);
-        });
-    });
-});
-
-router.put('/', (req, res) => {
-    Mongo.connect(url, function (err, conn) {
-        if (err) {
-            console.error(`ERROR upserting movie: ${err}`);
-            res.status(500).send(err);
-        }
-
-        const db = conn.db(dbName);
-
-        const movie = {
-            _id: req.body._id,
-            imdbid: req.body.imdbid,
-            imdburl: req.body.imdburl,
-            title: req.body.title,
-            rated: req.body.rated,
-            year: req.body.year,
-            released: req.body.released,
-            runtime: req.body.runtime,
-            director: req.body.director,
-            writer: req.body.writer,
-            actors: req.body.actors,
-            plot: req.body.plot,
-            poster: req.body.poster,
-            ratings: req.body.ratings,
-            greenRating: req.body.greenRating,
-            greenFactors: req.body.greenFactors,
-            tags: req.body.tags
-        };
-        console.log(`Connected successfully, attempting to ${movie._id ? 'update' : 'insert'} ${movie.title}`);
-
-        if (!movie.imdbid) res.status(422).send({ error: 'invalid movie: no imdbid found' });
-
-        upsertDocument(movie, db, (result) => {
-            console.log(result.result);
-            res.status(200).send(result.result);
         });
     });
 });
